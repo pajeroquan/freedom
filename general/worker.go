@@ -8,10 +8,10 @@ import (
 	"github.com/kataras/iris/v12/core/memstore"
 )
 
-func newRuntimeHandle() context.Handler {
+func newWorkerHandle() context.Handler {
 	return func(ctx context.Context) {
-		rt := newRuntime(ctx)
-		ctx.Values().Set(RuntimeKey, rt)
+		rt := newWorker(ctx)
+		ctx.Values().Set(WorkerKey, rt)
 		ctx.Next()
 		ctx.Values().Reset()
 		rt.ctx = nil
@@ -19,8 +19,8 @@ func newRuntimeHandle() context.Handler {
 	}
 }
 
-func newRuntime(ctx iris.Context) *appRuntime {
-	rt := new(appRuntime)
+func newWorker(ctx iris.Context) *worker {
+	rt := new(worker)
 	rt.freeServices = make([]interface{}, 0)
 	rt.coms = make(map[reflect.Type]interface{})
 	rt.ctx = ctx
@@ -29,8 +29,8 @@ func newRuntime(ctx iris.Context) *appRuntime {
 	return rt
 }
 
-// appRuntime .
-type appRuntime struct {
+// worker .
+type worker struct {
 	ctx          iris.Context
 	freeServices []interface{}
 	coms         map[reflect.Type]interface{}
@@ -40,12 +40,12 @@ type appRuntime struct {
 }
 
 // Ctx .
-func (rt *appRuntime) Ctx() iris.Context {
+func (rt *worker) Ctx() iris.Context {
 	return rt.ctx
 }
 
 // Logger .
-func (rt *appRuntime) Logger() Logger {
+func (rt *worker) Logger() Logger {
 	if rt.logger == nil {
 		l := rt.ctx.Values().Get("logger_impl")
 		if l == nil {
@@ -58,11 +58,11 @@ func (rt *appRuntime) Logger() Logger {
 }
 
 // Store .
-func (rt *appRuntime) Store() *memstore.Store {
+func (rt *worker) Store() *memstore.Store {
 	return rt.ctx.Values()
 }
 
 // Bus .
-func (rt *appRuntime) Bus() *Bus {
+func (rt *worker) Bus() *Bus {
 	return rt.bus
 }

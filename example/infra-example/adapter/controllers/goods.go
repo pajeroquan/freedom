@@ -14,7 +14,7 @@ func init() {
 }
 
 type GoodsController struct {
-	Runtime     freedom.Runtime
+	Runtime     freedom.Worker
 	GoodsSev    *application.GoodsService
 	JSONRequest *infra.JSONRequest
 }

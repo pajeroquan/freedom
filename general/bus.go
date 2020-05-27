@@ -33,11 +33,11 @@ func (b *Bus) Del(key string) {
 	b.Header.Del(key)
 }
 
-type BusHandler func(Runtime)
+type BusHandler func(Worker)
 
 var busMiddlewares []BusHandler
 
-func HandleBusMiddleware(rt Runtime) {
+func HandleBusMiddleware(rt Worker) {
 	for i := 0; i < len(busMiddlewares); i++ {
 		busMiddlewares[i](rt)
 	}

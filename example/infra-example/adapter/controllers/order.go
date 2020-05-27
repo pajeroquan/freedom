@@ -13,7 +13,7 @@ func init() {
 }
 
 type OrderController struct {
-	Runtime  freedom.Runtime
+	Runtime  freedom.Worker
 	OrderSev *application.OrderService
 }
 

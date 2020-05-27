@@ -28,7 +28,7 @@ func init() {
 }
 
 type StoreController struct {
-	Runtime freedom.Runtime
+	Runtime freedom.Worker
 }
 
 // PostSellGoodsBy 事件方法为 Post开头, 参数是事件id

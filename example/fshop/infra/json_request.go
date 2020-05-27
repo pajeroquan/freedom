@@ -29,7 +29,7 @@ type JSONRequest struct {
 }
 
 // BeginRequest .
-func (req *JSONRequest) BeginRequest(rt freedom.Runtime) {
+func (req *JSONRequest) BeginRequest(rt freedom.Worker) {
 	req.Infra.BeginRequest(rt)
 }
 

@@ -24,7 +24,7 @@ type UnitTest interface {
 }
 
 type UnitTestImpl struct {
-	rt      Runtime
+	rt      Worker
 	request *http.Request
 }
 
@@ -68,14 +68,14 @@ func (u *UnitTestImpl) Run() {
 	globalApp.comPool.singleBooting(globalApp)
 }
 
-func (u *UnitTestImpl) newRuntime() Runtime {
+func (u *UnitTestImpl) newRuntime() Worker {
 	ctx := context.NewContext(globalApp.IrisApp)
 	if u.request == nil {
 		u.request = new(http.Request)
 	}
 	ctx.BeginRequest(nil, u.request)
-	rt := newRuntime(ctx)
-	ctx.Values().Set(RuntimeKey, rt)
+	rt := newWorker(ctx)
+	ctx.Values().Set(WorkerKey, rt)
 	return rt
 }
 
@@ -92,7 +92,7 @@ type logEvent struct {
 }
 
 // DomainEvent .
-func (log *logEvent) DomainEvent(producer, topic string, data []byte, runtime Runtime, header ...map[string]string) {
+func (log *logEvent) DomainEvent(producer, topic string, data []byte, runtime Worker, header ...map[string]string) {
 	h := map[string]string{}
 	if len(header) > 0 {
 		h = header[0]

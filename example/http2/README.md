@@ -37,7 +37,7 @@ func installMiddleware(app freedom.Application) {
 	*/
 	app.InstallMiddleware(middleware.NewTrace("x-request-id"))
 	app.InstallMiddleware(middleware.NewRequestLogger("x-request-id", true))
-	app.InstallMiddleware(middleware.NewRuntimeLogger("x-request-id"))
+	
 
 	//http client安装普罗米修斯监控
 	requests.InstallPrometheus(config.Get().App.Other["service_name"].(string), freedom.Prometheus())

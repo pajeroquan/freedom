@@ -60,7 +60,7 @@ func FunTemplatePackage() string {
 		if e == nil || e == gorm.ErrRecordNotFound {
 			return
 		}
-		repo.GetRuntime().Logger().Errorf("Orm error, model: %s, method: %s, expression :%v, reason for error:%v", model, method, expression, e)
+		repo.GetWorker().Logger().Errorf("Orm error, model: %s, method: %s, expression :%v, reason for error:%v", model, method, expression, e)
 	}
 `
 }

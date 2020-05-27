@@ -17,7 +17,7 @@ func init() {
 // User 控制器
 type User struct {
 	Sev         *application.User  //用户领域服务
-	Runtime     freedom.Runtime    //运行时，一个请求绑定一个运行时
+	Runtime     freedom.Worker     //运行时，一个请求绑定一个运行时
 	JSONRequest *infra.JSONRequest //基础设施 用于处理客户端请求io的json数据和验证
 }
 

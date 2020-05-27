@@ -45,11 +45,11 @@ type SingleBoot interface {
 
 // BeginRequest .
 type BeginRequest interface {
-	BeginRequest(runtime Runtime)
+	BeginRequest(runtime Worker)
 }
 
-// Runtime .
-type Runtime interface {
+// Worker .
+type Worker interface {
 	Ctx() iris.Context
 	Logger() Logger
 	Store() *memstore.Store

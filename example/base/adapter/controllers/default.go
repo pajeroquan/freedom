@@ -10,7 +10,7 @@ func init() {
 		//initiator.BindController("/", &DefaultController{})
 		//加入中间件， 只对本控制器生效，全局中间件请在main加入。
 		initiator.BindController("/", &DefaultController{}, func(ctx freedom.Context) {
-			runtime := freedom.PickRuntime(ctx)
+			runtime := freedom.ToWorker(ctx)
 			runtime.Logger().Info("Hello middleware begin")
 			ctx.Next()
 			runtime.Logger().Info("Hello middleware end")
@@ -20,7 +20,7 @@ func init() {
 
 type DefaultController struct {
 	Sev     *application.DefaultService
-	Runtime freedom.Runtime
+	Runtime freedom.Worker
 }
 
 // Get handles the GET: / route.

@@ -16,7 +16,7 @@ func init() {
 }
 
 type Order struct {
-	Runtime     freedom.Runtime
+	Runtime     freedom.Worker
 	JSONRequest *infra.JSONRequest //基础设施 用于处理客户端请求io的json数据和验证
 	OrderSrv    *application.Order //订单领域服务
 }

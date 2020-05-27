@@ -8,7 +8,6 @@ import (
 
 	"github.com/8treenet/freedom"
 	iris "github.com/kataras/iris/v12"
-	"github.com/kataras/iris/v12/context"
 
 	"github.com/kataras/golog"
 )
@@ -20,16 +19,6 @@ func init() {
 		New: func() interface{} {
 			return &freedomLogger{}
 		},
-	}
-}
-
-// NewRuntimeLogger .
-func NewRuntimeLogger(traceIDName string) func(context.Context) {
-	return func(ctx context.Context) {
-		freelog := newFreedomLogger(ctx, traceIDName)
-		ctx.Values().Set("logger_impl", freelog)
-		ctx.Next()
-		loggerPool.Put(freelog)
 	}
 }
 
@@ -139,7 +128,7 @@ func (l *freedomLogger) Debugf(format string, args ...interface{}) {
 // format
 func (l *freedomLogger) format(v ...interface{}) string {
 	var list []string
-	traceID := freedom.PickRuntime(l.ctx).Bus().Get(l.traceIDName)
+	traceID := freedom.ToWorker(l.ctx).Bus().Get(l.traceIDName)
 
 	if traceID != "" {
 		traceIDStr := fmt.Sprint(traceID)

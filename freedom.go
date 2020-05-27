@@ -23,8 +23,8 @@ func init() {
 }
 
 type (
-	// Runtime .
-	Runtime = general.Runtime
+	// Worker .
+	Worker = general.Worker
 
 	// Initiator .
 	Initiator = general.Initiator
@@ -169,8 +169,8 @@ type Application interface {
 	InstallSerializer(marshal func(v interface{}) ([]byte, error), unmarshal func(data []byte, v interface{}) error)
 }
 
-func PickRuntime(ctx Context) Runtime {
-	if result, ok := ctx.Values().Get(general.RuntimeKey).(Runtime); ok {
+func ToWorker(ctx Context) Worker {
+	if result, ok := ctx.Values().Get(general.WorkerKey).(Worker); ok {
 		return result
 	}
 	return nil

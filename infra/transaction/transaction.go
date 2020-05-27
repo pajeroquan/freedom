@@ -30,7 +30,7 @@ type TransactionImpl struct {
 }
 
 // BeginRequest
-func (t *TransactionImpl) BeginRequest(rt freedom.Runtime) {
+func (t *TransactionImpl) BeginRequest(rt freedom.Worker) {
 	t.db = nil
 	t.Infra.BeginRequest(rt)
 }

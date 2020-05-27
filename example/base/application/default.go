@@ -24,7 +24,7 @@ type DefaultRepoInterface interface {
 
 // DefaultService .
 type DefaultService struct {
-	Runtime   freedom.Runtime
+	Runtime   freedom.Worker
 	DefRepo   *repositorys.DefaultRepository
 	DefRepoIF DefaultRepoInterface
 }

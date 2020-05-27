@@ -12,7 +12,7 @@ func init() {
 }
 
 type ShopController struct {
-	Runtime  freedom.Runtime
+	Runtime  freedom.Worker
 	Shopping application.ShoppingInterface
 }
 

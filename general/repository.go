@@ -13,11 +13,11 @@ import (
 
 // Repository .
 type Repository struct {
-	Runtime Runtime
+	Runtime Worker
 }
 
 // BeginRequest .
-func (repo *Repository) BeginRequest(rt Runtime) {
+func (repo *Repository) BeginRequest(rt Worker) {
 	repo.Runtime = rt
 }
 
@@ -165,6 +165,6 @@ func repositoryAPIRun(irisConf iris.Configuration) {
 }
 
 // GetRuntime .
-func (repo *Repository) GetRuntime() Runtime {
+func (repo *Repository) GetWorker() Worker {
 	return repo.Runtime
 }

@@ -15,7 +15,7 @@ func init() {
 }
 
 type Cart struct {
-	Runtime     freedom.Runtime
+	Runtime     freedom.Worker
 	CartSev     *application.Cart  //购物车领域服务
 	JSONRequest *infra.JSONRequest //基础设施 用于处理客户端请求io的json数据和验证
 }

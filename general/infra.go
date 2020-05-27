@@ -8,11 +8,11 @@ import (
 
 // Infra .
 type Infra struct {
-	Runtime Runtime `json:"-"`
+	Runtime Worker `json:"-"`
 }
 
 // BeginRequest .子实现多态
-func (c *Infra) BeginRequest(rt Runtime) {
+func (c *Infra) BeginRequest(rt Worker) {
 	c.Runtime = rt
 }
 

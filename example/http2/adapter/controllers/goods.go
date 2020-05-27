@@ -12,7 +12,7 @@ func init() {
 }
 
 type GoodsController struct {
-	Runtime freedom.Runtime
+	Runtime freedom.Worker
 }
 
 // Get handles the GET: /goods/:id route.
