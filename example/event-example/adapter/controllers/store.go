@@ -35,9 +35,9 @@ type StoreController struct {
 func (s *StoreController) PostSellGoodsBy(eventID string) error {
 	//rawData, err := ioutil.ReadAll(s.Worker.Ctx().Request().Body)
 	var goods objects.Goods
-	s.Worker.Ctx().ReadJSON(&goods)
+	s.Worker.IrisContext().ReadJSON(&goods)
 
-	action := s.Worker.Ctx().GetHeader("x-action")
+	action := s.Worker.IrisContext().GetHeader("x-action")
 	s.Worker.Logger().Infof("消耗商品ID:%d, %d件, 行为:%s, 消息key:%s", goods.ID, goods.Amount, action, eventID)
 	return nil
 }

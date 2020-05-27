@@ -22,9 +22,9 @@ type Goods struct {
 
 // GetItems 获取商品列表, GET: /goods/items route.
 func (g *Goods) GetItems() freedom.Result {
-	tag := g.Worker.Ctx().URLParamDefault("tag", "")
-	page := g.Worker.Ctx().URLParamIntDefault("page", 1)
-	pageSize := g.Worker.Ctx().URLParamIntDefault("pageSize", 10)
+	tag := g.Worker.IrisContext().URLParamDefault("tag", "")
+	page := g.Worker.IrisContext().URLParamIntDefault("page", 1)
+	pageSize := g.Worker.IrisContext().URLParamIntDefault("pageSize", 10)
 
 	items, err := g.GoodsSev.Items(page, pageSize, tag)
 	if err != nil {

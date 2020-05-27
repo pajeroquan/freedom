@@ -29,7 +29,7 @@ type UnitTestImpl struct {
 }
 
 func (u *UnitTestImpl) GetService(service interface{}) {
-	globalApp.GetService(u.rt.Ctx(), service)
+	globalApp.GetService(u.rt.IrisContext(), service)
 }
 
 func (u *UnitTestImpl) GetRepository(repository interface{}) {

@@ -35,9 +35,9 @@ func (o *Order) PutPay() freedom.Result {
 
 // GetItems 获取商品列表, GET: /order/items route.
 func (o *Order) GetItems() freedom.Result {
-	page := o.Worker.Ctx().URLParamIntDefault("page", 1)
-	pageSize := o.Worker.Ctx().URLParamIntDefault("pageSize", 10)
-	userId, err := o.Worker.Ctx().URLParamInt("userId")
+	page := o.Worker.IrisContext().URLParamIntDefault("page", 1)
+	pageSize := o.Worker.IrisContext().URLParamIntDefault("pageSize", 10)
+	userId, err := o.Worker.IrisContext().URLParamInt("userId")
 	if err != nil {
 		return &infra.JSONResponse{Error: err}
 	}
@@ -46,7 +46,7 @@ func (o *Order) GetItems() freedom.Result {
 	if err != nil {
 		return &infra.JSONResponse{Error: err}
 	}
-	o.Worker.Ctx().Header("X-Total-Page", strconv.Itoa(totalPage))
+	o.Worker.IrisContext().Header("X-Total-Page", strconv.Itoa(totalPage))
 
 	return &infra.JSONResponse{Object: dtoItems}
 }

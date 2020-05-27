@@ -2,6 +2,9 @@ package general
 
 import (
 	"sync"
+	"time"
+
+	stdContext "context"
 
 	iris "github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/context"
@@ -50,10 +53,13 @@ type BeginRequest interface {
 
 // Worker .
 type Worker interface {
-	Ctx() iris.Context
+	IrisContext() iris.Context
 	Logger() Logger
 	Store() *memstore.Store
 	Bus() *Bus
+	Context() stdContext.Context
+	WithContext(stdContext.Context)
+	StartTime() time.Time
 }
 
 var (

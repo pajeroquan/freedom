@@ -22,7 +22,7 @@ type Cart struct {
 
 // GetItems 获取购物车商品列表, GET: /cart/items route.
 func (c *Cart) GetItems() freedom.Result {
-	userId, err := c.Worker.Ctx().URLParamInt("userId")
+	userId, err := c.Worker.IrisContext().URLParamInt("userId")
 	if err != nil {
 		return &infra.JSONResponse{Error: err}
 	}
@@ -48,7 +48,7 @@ func (c *Cart) Post() freedom.Result {
 
 // DeleteAll 删除购物车全部商品, DELETE: /cart/all route.
 func (c *Cart) DeleteAll() freedom.Result {
-	userId, err := c.Worker.Ctx().URLParamInt("userId")
+	userId, err := c.Worker.IrisContext().URLParamInt("userId")
 	if err != nil {
 		return &infra.JSONResponse{Error: err}
 	}

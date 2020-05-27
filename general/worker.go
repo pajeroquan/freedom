@@ -2,6 +2,9 @@ package general
 
 import (
 	"reflect"
+	"time"
+
+	stdContext "context"
 
 	iris "github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/context"
@@ -26,6 +29,8 @@ func newWorker(ctx iris.Context) *worker {
 	rt.ctx = ctx
 	rt.store = ctx.Values()
 	rt.bus = newBus(ctx.Request().Header)
+	rt.stdCtx = ctx.Request().Context()
+	rt.time = time.Now()
 	return rt
 }
 
@@ -37,11 +42,28 @@ type worker struct {
 	store        *memstore.Store
 	logger       Logger
 	bus          *Bus
+	stdCtx       stdContext.Context
+	time         time.Time
 }
 
 // Ctx .
-func (rt *worker) Ctx() iris.Context {
+func (rt *worker) IrisContext() iris.Context {
 	return rt.ctx
+}
+
+// Context .
+func (rt *worker) Context() stdContext.Context {
+	return rt.stdCtx
+}
+
+// WithContext .
+func (rt *worker) WithContext(ctx stdContext.Context) {
+	rt.stdCtx = ctx
+}
+
+// StartTime .
+func (rt *worker) StartTime() time.Time {
+	return rt.time
 }
 
 // Logger .

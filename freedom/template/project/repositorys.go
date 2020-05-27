@@ -38,13 +38,13 @@ func repositoryTemplate() string {
 	func (repo *Default) GetIP() string {
 		//repo.DB().Find()
 		repo.Worker.Logger().Infof("我是Repository GetIP")
-		return repo.Worker.Ctx().RemoteAddr()
+		return repo.Worker.IrisContext().RemoteAddr()
 	}
 	
 	// GetUA - implment DefaultRepoInterface interface
 	func (repo *Default) GetUA() string {
 		repo.Worker.Logger().Infof("我是Repository GetUA")
-		return repo.Worker.Ctx().Request().UserAgent()
+		return repo.Worker.IrisContext().Request().UserAgent()
 	}
 	
 	`

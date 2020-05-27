@@ -82,13 +82,19 @@ type Application interface {
  */
 type Worker interface {
     //获取iris的上下文
-    Ctx() freedom.Context
+    IrisContext() freedom.Context
     //获取带上下文的日志实例。
     Logger() Logger
     //获取一级缓存实例，请求结束，该缓存生命周期结束。
     Store() *memstore.Store
     //获取总线，读写上下游透传的数据
     Bus() *Bus
+    //获取标准上下文
+    Context() stdContext.Context
+    //With标准上下文
+    WithContext(stdContext.Context)
+    //该worker起始的时间
+	StartTime() time.Time
 }
 
 // Initiator 实例初始化接口，在Prepare使用。

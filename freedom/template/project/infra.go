@@ -67,7 +67,7 @@ func jsonRequestTemplate() string {
 	
 	// ReadBodyJSON .
 	func (req *JSONRequest) ReadBodyJSON(obj interface{}) error {
-		rawData, err := ioutil.ReadAll(req.Worker.Ctx().Request().Body)
+		rawData, err := ioutil.ReadAll(req.Worker.IrisContext().Request().Body)
 		if err != nil {
 			return err
 		}
