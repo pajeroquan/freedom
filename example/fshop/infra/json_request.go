@@ -29,13 +29,13 @@ type JSONRequest struct {
 }
 
 // BeginRequest .
-func (req *JSONRequest) BeginRequest(rt freedom.Worker) {
-	req.Infra.BeginRequest(rt)
+func (req *JSONRequest) BeginRequest(worker freedom.Worker) {
+	req.Infra.BeginRequest(worker)
 }
 
 // ReadBodyJSON .
 func (req *JSONRequest) ReadBodyJSON(obj interface{}) error {
-	rawData, err := ioutil.ReadAll(req.Runtime.Ctx().Request().Body)
+	rawData, err := ioutil.ReadAll(req.Worker.Ctx().Request().Body)
 	if err != nil {
 		return err
 	}

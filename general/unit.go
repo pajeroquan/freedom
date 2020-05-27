@@ -92,7 +92,7 @@ type logEvent struct {
 }
 
 // DomainEvent .
-func (log *logEvent) DomainEvent(producer, topic string, data []byte, runtime Worker, header ...map[string]string) {
+func (log *logEvent) DomainEvent(producer, topic string, data []byte, Worker Worker, header ...map[string]string) {
 	h := map[string]string{}
 	if len(header) > 0 {
 		h = header[0]
@@ -102,7 +102,7 @@ func (log *logEvent) DomainEvent(producer, topic string, data []byte, runtime Wo
 		log.call(producer, topic, data, h)
 		return
 	}
-	runtime.Logger().Infof("Domain event:  %s   %s   %v", topic, string(data), header, h)
+	Worker.Logger().Infof("Domain event:  %s   %s   %v", topic, string(data), header, h)
 }
 
 func (u *UnitTestImpl) NewDomainEventInfra(call ...func(producer, topic string, data []byte, header map[string]string)) DomainEventInfra {

@@ -8,12 +8,12 @@ import (
 
 // Infra .
 type Infra struct {
-	Runtime Worker `json:"-"`
+	Worker Worker `json:"-"`
 }
 
 // BeginRequest .子实现多态
 func (c *Infra) BeginRequest(rt Worker) {
-	c.Runtime = rt
+	c.Worker = rt
 }
 
 // DB .
@@ -32,28 +32,36 @@ func (repo *Infra) GetOther(obj interface{}) {
 	return
 }
 
-// NewHttpRequest, transferCtx : Whether to pass the context, turned on by default. Typically used for tracking internal services.
-func (c *Infra) NewHttpRequest(url string, transferCtx ...bool) Request {
+// NewHttpRequest, transferBus : Whether to pass the context, turned on by default. Typically used for tracking internal services.
+func (c *Infra) NewHttpRequest(url string, transferBus ...bool) Request {
 	req := requests.NewHttpRequest(url)
-	if len(transferCtx) > 0 && !transferCtx[0] {
+	if len(transferBus) > 0 && !transferBus[0] {
 		return req
 	}
-	HandleBusMiddleware(c.Runtime)
 
-	//bus := c.Runtime.Bus()
-	//req.AddHeader("x-freedom-bus", bus.ToJson())
+	bus := c.Worker.Bus()
+	head := bus.Header
+	cloneHead := bus.Header.Clone()
+	bus.Header = cloneHead
+	HandleBusMiddleware(c.Worker)
+	bus.Header = head
+	req.SetHeader(cloneHead)
 	return req
 }
 
-// NewH2CRequest, transferCtx : Whether to pass the context, turned on by default. Typically used for tracking internal services.
-func (c *Infra) NewH2CRequest(url string, transferCtx ...bool) Request {
+// NewH2CRequest, transferBus : Whether to pass the context, turned on by default. Typically used for tracking internal services.
+func (c *Infra) NewH2CRequest(url string, transferBus ...bool) Request {
 	req := requests.NewH2CRequest(url)
-	if len(transferCtx) > 0 && !transferCtx[0] {
+	if len(transferBus) > 0 && !transferBus[0] {
 		return req
 	}
-	HandleBusMiddleware(c.Runtime)
 
-	//bus := c.Runtime.Bus()
-	//req.AddHeader("x-freedom-bus", bus.ToJson())
+	bus := c.Worker.Bus()
+	head := bus.Header
+	cloneHead := bus.Header.Clone()
+	bus.Header = cloneHead
+	HandleBusMiddleware(c.Worker)
+	bus.Header = head
+	req.SetHeader(cloneHead)
 	return req
 }

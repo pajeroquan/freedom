@@ -13,7 +13,7 @@ func init() {
 }
 
 type ShopController struct {
-	Runtime  freedom.Worker
+	Worker   freedom.Worker
 	OrderSev *application.OrderService
 }
 
@@ -24,7 +24,7 @@ func (c *ShopController) Post() freedom.Result {
 		Num     int `json:"num"`     //购买数量
 		UserID  int `json:"userId"`  //用户id
 	}
-	if e := c.Runtime.Ctx().ReadJSON(&request); e != nil {
+	if e := c.Worker.Ctx().ReadJSON(&request); e != nil {
 		return &infra.JSONResponse{Error: e}
 	}
 

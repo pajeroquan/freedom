@@ -23,7 +23,7 @@ const (
 
 //购买控制器
 type ShopController struct {
-    Runtime freedom.Runtime
+    Worker freedom.Worker
     /*
         github.com/8treenet/freedom/infra/kafka
         type Producer interface {
@@ -37,7 +37,7 @@ type ShopController struct {
     Get handles the GET: /shop/:id route.
     Producer.NewMsg(Topic string, Content []byte) : 创建消息
     Msg.SetHeaders(map[string]inteface{}) : 设置k/v 头
-    Msg.SetRuntime(Runtime) : 设置请求上下文，设置后请求的上下文会透传到消费端
+    Msg.SetWorker(freedom.Worker) : 设置请求运行时对象，设置后请求的上下文会透传到消费端
     msg.Publish() : 发布
 */
 func (s *ShopController) GetBy(id int) string {
@@ -46,7 +46,7 @@ func (s *ShopController) GetBy(id int) string {
         Amount: 10,
     })
     msg := s.Producer.NewMsg(EventSell, data)
-    msg.SetHeaders(map[string]string{"x-action": "购买"}).SetRuntime(s.Runtime).Publish()
+    msg.SetHeaders(map[string]string{"x-action": "购买"}).SetWorker(s.Worker).Publish()
     return "ok"
 }  
 ```
@@ -70,19 +70,19 @@ func init() {
 
 //库存控制器
 type StoreController struct {
-    Runtime freedom.Runtime
+    Worker freedom.Worker
 }
 
 /*
     PostSellGoodsBy 事件方法为 Post开头, 参数是事件唯一id
 */
 func (s *StoreController) PostSellGoodsBy(eventID string) error {
-    //rawData, err := ioutil.ReadAll(s.Runtime.Ctx().Request().Body)
+    //rawData, err := ioutil.ReadAll(s.Worker.Ctx().Request().Body)
     var goods objects.Goods
-    s.Runtime.Ctx().ReadJSON(&goods)
+    s.Worker.Ctx().ReadJSON(&goods)
 
-    action := s.Runtime.Ctx().GetHeader("x-action")
-    s.Runtime.Logger().Infof("消耗商品ID:%d, %d件, 行为:%s, 消息key:%s", goods.ID, goods.Amount, action, eventID)
+    action := s.Worker.Ctx().GetHeader("x-action")
+    s.Worker.Logger().Infof("消耗商品ID:%d, %d件, 行为:%s, 消息key:%s", goods.ID, goods.Amount, action, eventID)
     //返回错误 或 http code 不为200 触发重试
     return nil
 }
@@ -157,7 +157,7 @@ func (g *Goods) Shopping() {
     */
 
     //触发领域事件 `Goods:Shopping`
-	g.DomainEvent("Goods:Shopping", g.goodsObj)
+    g.DomainEvent("Goods:Shopping", g.goodsObj)
 }
 
 func (g *Goods) Identity() string {

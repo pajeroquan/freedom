@@ -16,15 +16,15 @@ func init() {
 
 type Goods struct {
 	GoodsSev    *application.Goods //商品领域服务
-	Runtime     freedom.Worker     //运行时，一个请求绑定一个运行时
+	Worker      freedom.Worker     //运行时，一个请求绑定一个运行时
 	JSONRequest *infra.JSONRequest //基础设施 用于处理客户端请求io的json数据和验证
 }
 
 // GetItems 获取商品列表, GET: /goods/items route.
 func (g *Goods) GetItems() freedom.Result {
-	tag := g.Runtime.Ctx().URLParamDefault("tag", "")
-	page := g.Runtime.Ctx().URLParamIntDefault("page", 1)
-	pageSize := g.Runtime.Ctx().URLParamIntDefault("pageSize", 10)
+	tag := g.Worker.Ctx().URLParamDefault("tag", "")
+	page := g.Worker.Ctx().URLParamIntDefault("page", 1)
+	pageSize := g.Worker.Ctx().URLParamIntDefault("pageSize", 10)
 
 	items, err := g.GoodsSev.Items(page, pageSize, tag)
 	if err != nil {

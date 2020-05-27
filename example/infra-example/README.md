@@ -97,7 +97,7 @@ func init() {
 
 // OrderService .
 type OrderService struct {
-	Runtime   freedom.Runtime
+	Worker   freedom.Worker
 	GoodsRepo repositorys.GoodsInterface	//repositorys包声明的商品仓库接口
 	OrderRepo repositorys.OrderInterface	//repositorys包声明的订单仓库接口
 
@@ -293,15 +293,15 @@ type JSONRequest struct {
 }
 
 // BeginRequest 每一个请求只会触发一次
-func (req *JSONRequest) BeginRequest(rt freedom.Runtime) {
+func (req *JSONRequest) BeginRequest(worker freedom.Worker) {
 	// 调用基类初始化请求运行时
-	req.Infra.BeginRequest(rt)
+	req.Infra.BeginRequest(worker)
 }
 
 // ReadBodyJSON .
 func (req *JSONRequest) ReadBodyJSON(obj interface{}) error {
 	//从上下文读取io数据
-	rawData, err := ioutil.ReadAll(req.Runtime.Ctx().Request().Body)
+	rawData, err := ioutil.ReadAll(req.Worker.Ctx().Request().Body)
 	if err != nil {
 		return err
 	}

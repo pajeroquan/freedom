@@ -15,14 +15,14 @@ func init() {
 }
 
 type Cart struct {
-	Runtime     freedom.Worker
+	Worker      freedom.Worker
 	CartSev     *application.Cart  //购物车领域服务
 	JSONRequest *infra.JSONRequest //基础设施 用于处理客户端请求io的json数据和验证
 }
 
 // GetItems 获取购物车商品列表, GET: /cart/items route.
 func (c *Cart) GetItems() freedom.Result {
-	userId, err := c.Runtime.Ctx().URLParamInt("userId")
+	userId, err := c.Worker.Ctx().URLParamInt("userId")
 	if err != nil {
 		return &infra.JSONResponse{Error: err}
 	}
@@ -48,7 +48,7 @@ func (c *Cart) Post() freedom.Result {
 
 // DeleteAll 删除购物车全部商品, DELETE: /cart/all route.
 func (c *Cart) DeleteAll() freedom.Result {
-	userId, err := c.Runtime.Ctx().URLParamInt("userId")
+	userId, err := c.Worker.Ctx().URLParamInt("userId")
 	if err != nil {
 		return &infra.JSONResponse{Error: err}
 	}

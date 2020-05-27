@@ -21,12 +21,12 @@ func controllerTemplate() string {
 	
 	type Default struct {
 		Sev     *application.Default
-		Runtime freedom.Runtime
+		Worker freedom.Worker
 	}
 	
 	// Get handles the GET: / route.
 	func (c *Default) Get() freedom.Result {
-		c.Runtime.Logger().Infof("我是控制器")
+		c.Worker.Logger().Infof("我是控制器")
 		remote := c.Sev.RemoteInfo()
 		return &infra.JSONResponse{Object: remote}
 	}

@@ -44,7 +44,7 @@ func installLogrus(app freedom.Application) {
 
 // newBus 自定义总线中间件示例.
 func newBus(serviceName string) func(freedom.Worker) {
-	//调用下游服务和事件消费者将传递service-name， 下游服务和mq事件消费者，使用 Runtime.Bus() 可获取到service-name。
+	//调用下游服务和事件消费者将传递service-name， 下游服务和mq事件消费者，使用 Worker.Bus() 可获取到service-name。
 	return func(run freedom.Worker) {
 		bus := run.Bus()
 		bus.Add("x-service-name", serviceName)

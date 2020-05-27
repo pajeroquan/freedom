@@ -20,7 +20,7 @@ func init() {
 
 // GoodsService .
 type GoodsService struct {
-	Runtime   freedom.Worker
+	Worker    freedom.Worker
 	GoodsRepo repositorys.GoodsInterface
 }
 

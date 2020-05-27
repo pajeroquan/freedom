@@ -22,7 +22,7 @@ type GoodsRepository struct {
 
 // GetGoods implment Goods interface
 func (repo *GoodsRepository) GetGoods(goodsID int) (result objects.GoodsModel) {
-	repo.Runtime.Logger().Info("我是GoodsRepository")
+	repo.Worker.Logger().Info("我是GoodsRepository")
 	//通过h2c request 访问本服务 /goods/:id
 	addr := "http://127.0.0.1:8000/goods/" + strconv.Itoa(goodsID)
 	repo.NewH2CRequest(addr).Get().ToJSON(&result)

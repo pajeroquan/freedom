@@ -78,10 +78,9 @@ type Application interface {
 }
 
  /*
-    每一个请求都会串行的创建一系列对象(controller,service,repository)，不用太担心内存问题，因为底层有对象池。
-    Runtime 运行时对象导出接口，一个请求创建一个运行时对象，在不同层里使用也是同一实例。
+    Worker 请求运行时对象，一个请求创建一个运行时对象，可以注入到controller、service、repository。
  */
-type Runtime interface {
+type Worker interface {
     //获取iris的上下文
     Ctx() freedom.Context
     //获取带上下文的日志实例。
@@ -143,10 +142,10 @@ func init() {
 
         //中间件方式绑定， 只对本控制器生效，全局中间件请在main加入。
         initiator.BindController("/", &DefaultController{}, func(ctx freedom.Context) {
-            runtime := freedom.PickRuntime(ctx)
-            runtime.Logger().Info("Hello middleware begin")
+            worker := freedom.ToWorker(ctx)
+            worker.Logger().Info("Hello middleware begin")
             ctx.Next()
-            runtime.Logger().Info("Hello middleware end")
+            worker.Logger().Info("Hello middleware end")
         })
     })
 }
@@ -157,7 +156,7 @@ func init() {
 */
 type DefaultController struct {
     Sev     *services.DefaultService //被注入的变量名，必须是大写开头。go规范小写变量名，反射是无法注入的。
-    Runtime freedom.Runtime //注入请求运行时
+    Worker freedom.Worker //注入请求运行时对象
 }
 
 /* 
@@ -170,7 +169,7 @@ func (c *DefaultController) Get() (result struct {
 }, e error) {
     
     //打印日志，并且调用服务的 RemoteInfo 方法。
-    c.Runtime.Logger().Infof("我是控制器")
+    c.Worker.Logger().Infof("我是控制器")
     remote := c.Sev.RemoteInfo()
 
     result.IP = remote.IP
@@ -188,7 +187,7 @@ func init() {
             return &DefaultService{}
         })
 
-        //控制器中使用依赖注入, 需要注入到控制器.
+        //控制器中使用DefaultService，需要显示使用依赖注入
         initiator.InjectController(func(ctx freedom.Context) (ds *DefaultService) {
             //从对象池中获取service
             initiator.GetService(ctx, &ds)
@@ -199,7 +198,7 @@ func init() {
 
 //  领域服务 DefaultService
 type DefaultService struct {
-    Runtime freedom.Runtime
+    Worker freedom.Worker
     DefRepo   *repositorys.DefaultRepository
 }
 
@@ -208,7 +207,7 @@ func (s *DefaultService) RemoteInfo() (result struct {
 	IP string
 	UA string
 }) {
-    s.Runtime.Logger().Infof("我是service")
+    s.Worker.Logger().Infof("我是service")
 
     //调用repo获取数据
     result.IP = s.DefRepo.GetIP()
@@ -238,15 +237,15 @@ type DefaultRepository struct {
 
 // GetIP .
 func (repo *DefaultRepository) GetIP() string {
-    repo.Runtime.Logger().Infof("我是Repository GetIP")
-    return repo.Runtime.Ctx().RemoteAddr()
+    repo.Worker.Logger().Infof("我是Repository GetIP")
+    return repo.Worker.Ctx().RemoteAddr()
 }
 
 // GetUA - implment DefaultRepoInterface interface
 func (repo *DefaultRepository) GetUA() string {
     //该方法的接口声明在application/default.go
-    repo.Runtime.Logger().Infof("我是Repository GetUA")
-    return repo.Runtime.Ctx().Request().UserAgent()
+    repo.Worker.Logger().Infof("我是Repository GetUA")
+    return repo.Worker.Ctx().Request().UserAgent()
 }  
 ```
 

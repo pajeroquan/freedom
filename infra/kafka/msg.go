@@ -22,9 +22,9 @@ type Msg struct {
 }
 
 // SetWorker .
-func (msg *Msg) SetWorker(rt freedom.Worker) *Msg {
-	general.HandleBusMiddleware(rt)
-	msg.httpHeader = rt.Bus().Header
+func (msg *Msg) SetWorker(worker freedom.Worker) *Msg {
+	general.HandleBusMiddleware(worker)
+	msg.httpHeader = worker.Bus().Header
 	return msg
 }
 

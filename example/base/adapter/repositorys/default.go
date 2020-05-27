@@ -20,12 +20,12 @@ type DefaultRepository struct {
 // GetIP .
 func (repo *DefaultRepository) GetIP() string {
 	//repo.DB().Find()
-	repo.Runtime.Logger().Infof("我是Repository GetIP")
-	return repo.Runtime.Ctx().RemoteAddr()
+	repo.Worker.Logger().Infof("我是Repository GetIP")
+	return repo.Worker.Ctx().RemoteAddr()
 }
 
 // GetUA - implment DefaultRepoInterface interface
 func (repo *DefaultRepository) GetUA() string {
-	repo.Runtime.Logger().Infof("我是Repository GetUA")
-	return repo.Runtime.Ctx().Request().UserAgent()
+	repo.Worker.Logger().Infof("我是Repository GetUA")
+	return repo.Worker.Ctx().Request().UserAgent()
 }

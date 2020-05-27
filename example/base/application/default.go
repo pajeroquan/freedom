@@ -24,7 +24,7 @@ type DefaultRepoInterface interface {
 
 // DefaultService .
 type DefaultService struct {
-	Runtime   freedom.Worker
+	Worker    freedom.Worker
 	DefRepo   *repositorys.DefaultRepository
 	DefRepoIF DefaultRepoInterface
 }
@@ -34,7 +34,7 @@ func (s *DefaultService) RemoteInfo() (result struct {
 	IP string
 	UA string
 }) {
-	s.Runtime.Logger().Infof("我是service")
+	s.Worker.Logger().Infof("我是service")
 	result.IP = s.DefRepo.GetIP()
 	result.UA = s.DefRepoIF.GetUA()
 	return

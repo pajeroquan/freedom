@@ -17,7 +17,7 @@ func init() {
 }
 
 type Delivery struct {
-	Runtime     freedom.Worker
+	Worker      freedom.Worker
 	OrderSrv    *application.Order //订单领域服务
 	JSONRequest *infra.JSONRequest //基础设施 用于处理客户端请求io的json数据和验证
 }
@@ -26,7 +26,7 @@ type Delivery struct {
 func (d *Delivery) PostOrderPayBy(eventID string) error {
 	var msg dto.OrderPayMsg
 	d.JSONRequest.ReadBodyJSON(&msg)
-	d.Runtime.Logger().Info("发货提醒 eventId:", eventID, "msg:", msg)
+	d.Worker.Logger().Info("发货提醒 eventId:", eventID, "msg:", msg)
 	return nil
 }
 

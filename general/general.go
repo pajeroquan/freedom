@@ -45,7 +45,7 @@ type SingleBoot interface {
 
 // BeginRequest .
 type BeginRequest interface {
-	BeginRequest(runtime Worker)
+	BeginRequest(Worker Worker)
 }
 
 // Worker .
