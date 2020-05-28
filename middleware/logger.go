@@ -94,7 +94,8 @@ func (l *freedomLogger) Errorf(format string, args ...interface{}) {
 
 // Warn will print when freedomLogger's Level is warn, info or debug.
 func (l *freedomLogger) Warn(v ...interface{}) {
-	l.ctx.Application().Logger().Warn(l.format(v...))
+	fileLine := fileLine()
+	l.ctx.Application().Logger().Warn(l.format(v...), " ", fileLine)
 }
 
 // Warnf will print when freedomLogger's Level is warn, info or debug.
@@ -116,7 +117,8 @@ func (l *freedomLogger) Infof(format string, args ...interface{}) {
 
 // Debug will print when freedomLogger's Level is debug.
 func (l *freedomLogger) Debug(v ...interface{}) {
-	l.ctx.Application().Logger().Debug(l.format(v...))
+	fileLine := fileLine()
+	l.ctx.Application().Logger().Debug(l.format(v...), " ", fileLine)
 }
 
 // Debugf will print when freedomLogger's Level is debug.

@@ -76,14 +76,7 @@ func (repo *Repository) NewHttpRequest(url string, transferBus ...bool) Request 
 	if len(transferBus) > 0 && !transferBus[0] {
 		return req
 	}
-
-	bus := repo.Worker.Bus()
-	head := bus.Header
-	cloneHead := bus.Header.Clone()
-	bus.Header = cloneHead
-	HandleBusMiddleware(repo.Worker)
-	bus.Header = head
-	req.SetHeader(cloneHead)
+	req.SetHeader(repo.Worker.Bus().Header)
 	return req
 }
 
@@ -93,14 +86,7 @@ func (repo *Repository) NewH2CRequest(url string, transferBus ...bool) Request {
 	if len(transferBus) > 0 && !transferBus[0] {
 		return req
 	}
-
-	bus := repo.Worker.Bus()
-	head := bus.Header
-	cloneHead := bus.Header.Clone()
-	bus.Header = cloneHead
-	HandleBusMiddleware(repo.Worker)
-	bus.Header = head
-	req.SetHeader(cloneHead)
+	req.SetHeader(repo.Worker.Bus().Header)
 	return req
 }
 

@@ -39,13 +39,7 @@ func (c *Infra) NewHttpRequest(url string, transferBus ...bool) Request {
 		return req
 	}
 
-	bus := c.Worker.Bus()
-	head := bus.Header
-	cloneHead := bus.Header.Clone()
-	bus.Header = cloneHead
-	HandleBusMiddleware(c.Worker)
-	bus.Header = head
-	req.SetHeader(cloneHead)
+	req.SetHeader(c.Worker.Bus().Header)
 	return req
 }
 
@@ -56,12 +50,6 @@ func (c *Infra) NewH2CRequest(url string, transferBus ...bool) Request {
 		return req
 	}
 
-	bus := c.Worker.Bus()
-	head := bus.Header
-	cloneHead := bus.Header.Clone()
-	bus.Header = cloneHead
-	HandleBusMiddleware(c.Worker)
-	bus.Header = head
-	req.SetHeader(cloneHead)
+	req.SetHeader(c.Worker.Bus().Header)
 	return req
 }

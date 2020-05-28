@@ -13,25 +13,24 @@ import (
 
 func newWorkerHandle() context.Handler {
 	return func(ctx context.Context) {
-		rt := newWorker(ctx)
-		ctx.Values().Set(WorkerKey, rt)
+		work := newWorker(ctx)
+		ctx.Values().Set(WorkerKey, work)
 		ctx.Next()
 		ctx.Values().Reset()
-		rt.ctx = nil
-		rt.store = nil
+		work.ctx = nil
 	}
 }
 
 func newWorker(ctx iris.Context) *worker {
-	rt := new(worker)
-	rt.freeServices = make([]interface{}, 0)
-	rt.coms = make(map[reflect.Type]interface{})
-	rt.ctx = ctx
-	rt.store = ctx.Values()
-	rt.bus = newBus(ctx.Request().Header)
-	rt.stdCtx = ctx.Request().Context()
-	rt.time = time.Now()
-	return rt
+	work := new(worker)
+	work.freeServices = make([]interface{}, 0)
+	work.coms = make(map[reflect.Type]interface{})
+	work.ctx = ctx
+	work.bus = newBus(ctx.Request().Header)
+	work.stdCtx = ctx.Request().Context()
+	work.time = time.Now()
+	HandleBusMiddleware(work)
+	return work
 }
 
 // worker .
@@ -44,6 +43,7 @@ type worker struct {
 	bus          *Bus
 	stdCtx       stdContext.Context
 	time         time.Time
+	values       memstore.Store
 }
 
 // Ctx .
@@ -81,7 +81,7 @@ func (rt *worker) Logger() Logger {
 
 // Store .
 func (rt *worker) Store() *memstore.Store {
-	return rt.ctx.Values()
+	return &rt.values
 }
 
 // Bus .
