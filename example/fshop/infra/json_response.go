@@ -4,6 +4,7 @@ import (
 	"strconv"
 
 	"github.com/8treenet/extjson"
+	"github.com/8treenet/freedom"
 	"github.com/8treenet/freedom/general"
 	iris "github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/context"
@@ -33,7 +34,8 @@ func (jrep JSONResponse) Dispatch(ctx context.Context) {
 	if repData.Error != "" && repData.Code == 0 {
 		repData.Code = iris.StatusNotImplemented
 	}
-	loggger := ctx.Values().Get("logger_impl")
+
+	loggger := freedom.ToWorker(ctx).Store().Get("logger_impl")
 	ctx.Values().Set("code", strconv.Itoa(repData.Code))
 
 	var jsonErr error

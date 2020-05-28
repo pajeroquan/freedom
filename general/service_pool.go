@@ -43,6 +43,9 @@ func (pool *ServicePool) freeHandle() context.Handler {
 	return func(ctx context.Context) {
 		ctx.Next()
 		rt := ctx.Values().Get(WorkerKey).(*worker)
+		if !rt.IsRecycle() {
+			return
+		}
 		for index := 0; index < len(rt.freeServices); index++ {
 			pool.free(rt.freeServices[index])
 		}

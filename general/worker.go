@@ -17,7 +17,10 @@ func newWorkerHandle() context.Handler {
 		ctx.Values().Set(WorkerKey, work)
 		ctx.Next()
 		ctx.Values().Reset()
-		work.ctx = nil
+
+		if work.recycle {
+			work.ctx = nil
+		}
 	}
 }
 
@@ -29,6 +32,7 @@ func newWorker(ctx iris.Context) *worker {
 	work.bus = newBus(ctx.Request().Header)
 	work.stdCtx = ctx.Request().Context()
 	work.time = time.Now()
+	work.recycle = true
 	HandleBusMiddleware(work)
 	return work
 }
@@ -44,6 +48,7 @@ type worker struct {
 	stdCtx       stdContext.Context
 	time         time.Time
 	values       memstore.Store
+	recycle      bool
 }
 
 // Ctx .
@@ -69,7 +74,7 @@ func (rt *worker) StartTime() time.Time {
 // Logger .
 func (rt *worker) Logger() Logger {
 	if rt.logger == nil {
-		l := rt.ctx.Values().Get("logger_impl")
+		l := rt.values.Get("logger_impl")
 		if l == nil {
 			rt.logger = rt.ctx.Application().Logger()
 		} else {
@@ -87,4 +92,14 @@ func (rt *worker) Store() *memstore.Store {
 // Bus .
 func (rt *worker) Bus() *Bus {
 	return rt.bus
+}
+
+// CloseRecycle .
+func (rt *worker) CloseRecycle() {
+	rt.recycle = false
+}
+
+// SetRecycle .
+func (rt *worker) IsRecycle() bool {
+	return rt.recycle
 }

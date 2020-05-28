@@ -139,6 +139,9 @@ func (pool *InfraPool) freeHandle() context.Handler {
 	return func(ctx context.Context) {
 		ctx.Next()
 		rt := ctx.Values().Get(WorkerKey).(*worker)
+		if !rt.IsRecycle() {
+			return
+		}
 		for objType, obj := range rt.coms {
 			pool.free(objType, obj)
 		}

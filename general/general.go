@@ -60,6 +60,8 @@ type Worker interface {
 	Context() stdContext.Context
 	WithContext(stdContext.Context)
 	StartTime() time.Time
+	CloseRecycle()
+	IsRecycle() bool
 }
 
 var (

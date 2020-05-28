@@ -94,7 +94,11 @@ type Worker interface {
     //With标准上下文
     WithContext(stdContext.Context)
     //该worker起始的时间
-	StartTime() time.Time
+    StartTime() time.Time
+    //是否回收 : freedom内部请求结束后，判断是否相关对象回收的处理，默认是开启回收。 外部中间件也可以做类似处理。
+    IsRecycle() bool
+    //关闭回收 : 如果使用go并发，因该在之前使用 CloseRecycle() 来关闭请求结束后的回收，因为go func()的处理可能在请求回收之后
+    CloseRecycle()
 }
 
 // Initiator 实例初始化接口，在Prepare使用。

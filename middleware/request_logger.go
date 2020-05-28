@@ -64,9 +64,13 @@ func (l *requestLoggerMiddleware) ServeHTTP(ctx context.Context) {
 	ctx.Request().Body = ioutil.NopCloser(bytes.NewBuffer(reqBodyBys))
 
 	freelog := newFreedomLogger(ctx, l.config.TraceName)
-	ctx.Values().Set("logger_impl", freelog)
+	work := freedom.ToWorker(ctx)
+	work.Store().Set("logger_impl", freelog)
 	ctx.Next()
-	loggerPool.Put(freelog)
+
+	if work.IsRecycle() {
+		loggerPool.Put(freelog)
+	}
 
 	// no time.Since in order to format it well after
 	endTime = time.Now()

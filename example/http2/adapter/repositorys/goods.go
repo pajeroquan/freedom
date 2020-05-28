@@ -28,6 +28,8 @@ func (repo *GoodsRepository) GetGoods(goodsID int) (result objects.GoodsModel) {
 	addr := "http://127.0.0.1:8000/goods/" + strconv.Itoa(goodsID)
 	repo.NewH2CRequest(addr).Get().ToJSON(&result)
 
+	//开启go 并发,并且没有group wait。请求结束触发相关对象回收，会快于当前并发go的读取数据，所以使用CloseRecycle 关闭回收
+	repo.Worker.CloseRecycle()
 	go func() {
 		var model objects.GoodsModel
 		repo.NewH2CRequest(addr).Get().ToJSON(&model)
