@@ -16,11 +16,12 @@ func newWorkerHandle() context.Handler {
 		work := newWorker(ctx)
 		ctx.Values().Set(WorkerKey, work)
 		ctx.Next()
-		ctx.Values().Reset()
-
-		if work.recycle {
-			work.ctx = nil
+		if !work.IsRecycle() {
+			return
 		}
+		work.logger = nil
+		work.ctx = nil
+		ctx.Values().Reset()
 	}
 }
 
@@ -42,7 +43,6 @@ type worker struct {
 	ctx          iris.Context
 	freeServices []interface{}
 	coms         map[reflect.Type]interface{}
-	store        *memstore.Store
 	logger       Logger
 	bus          *Bus
 	stdCtx       stdContext.Context
