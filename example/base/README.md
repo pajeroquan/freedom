@@ -141,7 +141,7 @@ type Starter interface {
 
 
 #### controllers/default.go
-##### [iris路由文档](https://github.com/kataras/iris/v12/wiki/MVC)
+##### [iris路由文档](https://github.com/kataras/iris/wiki/MVC)
 ```go
 func init() {
     freedom.Prepare(func(initiator freedom.Initiator) {
