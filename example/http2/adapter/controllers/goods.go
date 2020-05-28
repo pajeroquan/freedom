@@ -19,8 +19,7 @@ type GoodsController struct {
 func (goods *GoodsController) GetBy(id int) (result objects.GoodsModel, e error) {
 	goods.Worker.Logger().Info("我是GoodsController.GetByID控制器,返回商品名称和价格")
 	//打印出bus的数据
-	name := goods.Worker.Bus().Get("x-service-name")
-	goods.Worker.Logger().Error("bus.service-name", name)
+	goods.Worker.Logger().Error("bus", goods.Worker.Bus())
 	switch id {
 	case 1:
 		result.Name = "冈本"

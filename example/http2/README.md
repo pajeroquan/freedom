@@ -118,8 +118,10 @@ type GoodsRepository struct {
 
 // GetGoods implment Goods interface
 func (repo *GoodsRepository) GetGoods(goodsID int) (result objects.GoodsModel) {
-	//篇幅所限，示例直接调用自身服务的其他http接口，而不是下游。
 	repo.Worker.Logger().Info("我是GoodsRepository")
+	repo.Worker.Bus().Add("x-sender-name", "GoodsRepository")
+
+	//篇幅所限，示例直接调用自身服务的其他http接口，而不是下游。
 	//通过h2c request 访问本服务 /goods/:id
 	addr := "http://127.0.0.1:8000/goods/" + strconv.Itoa(goodsID)
 	repo.NewH2CRequest(addr).Get().ToJSON(&result)
