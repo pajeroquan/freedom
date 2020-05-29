@@ -25,7 +25,7 @@ type Delivery struct {
 // PostOrderPayBy 返货提醒, POST: /delivery/order/pay route.
 func (d *Delivery) PostOrderPayBy(eventID string) error {
 	var msg dto.OrderPayMsg
-	d.JSONRequest.ReadBodyJSON(&msg)
+	d.JSONRequest.ReadJSON(&msg)
 	d.Worker.Logger().Info("发货提醒 eventId:", eventID, "msg:", msg)
 	return nil
 }
@@ -33,7 +33,7 @@ func (d *Delivery) PostOrderPayBy(eventID string) error {
 // Post 发货, POST: /delivery route.
 func (d *Delivery) Post() freedom.Result {
 	var req dto.DeliveryReq
-	if e := d.JSONRequest.ReadBodyJSON(&req); e != nil {
+	if e := d.JSONRequest.ReadJSON(&req); e != nil {
 		return &infra.JSONResponse{Error: e}
 	}
 

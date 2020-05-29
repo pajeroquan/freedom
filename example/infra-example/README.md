@@ -264,7 +264,7 @@ func (goods *GoodsController) PutStock() freedom.Result {
 	}
 
 	//使用自定义的json组件读取请求数据, 并且处理数据验证。
-	if e := goods.JSONRequest.ReadBodyJSON(&request); e != nil {
+	if e := goods.JSONRequest.ReadJSON(&request); e != nil {
 		return &infra.JSONResponse{Err: e}
 	}
 }
@@ -298,8 +298,8 @@ func (req *JSONRequest) BeginRequest(worker freedom.Worker) {
 	req.Infra.BeginRequest(worker)
 }
 
-// ReadBodyJSON .
-func (req *JSONRequest) ReadBodyJSON(obj interface{}) error {
+// ReadJSON .
+func (req *JSONRequest) ReadJSON(obj interface{}) error {
 	//从上下文读取io数据
 	rawData, err := ioutil.ReadAll(req.Worker.Ctx().Request().Body)
 	if err != nil {

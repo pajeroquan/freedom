@@ -7,6 +7,7 @@ import (
 
 	"github.com/kataras/iris/v12/core/host"
 	"github.com/kataras/iris/v12/hero"
+	"github.com/kataras/iris/v12/mvc"
 
 	"github.com/8treenet/freedom/general"
 	"github.com/BurntSushi/toml"
@@ -60,7 +61,8 @@ type (
 
 	BusHandler = general.BusHandler
 
-	Configuration = iris.Configuration
+	Configuration    = iris.Configuration
+	BeforeActivation = mvc.BeforeActivation
 )
 
 // NewApplication .

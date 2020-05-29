@@ -24,7 +24,7 @@ type User struct {
 // Put 修改密码, PUT: /user route.
 func (u *User) Put() freedom.Result {
 	var req dto.ChangePasswordReq
-	if e := u.JSONRequest.ReadBodyJSON(&req); e != nil {
+	if e := u.JSONRequest.ReadJSON(&req); e != nil {
 		return &infra.JSONResponse{Error: e}
 	}
 
@@ -49,7 +49,7 @@ func (c *User) GetBy(id int) freedom.Result {
 // Post 注册用户, POST: /user route.
 func (u *User) Post() freedom.Result {
 	var req dto.RegisterUserReq
-	if e := u.JSONRequest.ReadBodyJSON(&req); e != nil {
+	if e := u.JSONRequest.ReadJSON(&req); e != nil {
 		return &infra.JSONResponse{Error: e}
 	}
 
